@@ -1,3 +1,4 @@
+using Core.Interfaces;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -17,7 +18,7 @@ namespace API
             _config= configuration;
         }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        // This method gets called by the runtime. Use this method to add services to the container. Order of services doesnn't matter.
         public void ConfigureServices(IServiceCollection services)
         {
 
@@ -29,9 +30,10 @@ namespace API
             services.AddDbContext<StoreContext>(options => 
                 options.UseSqlite(_config.GetConnectionString("DefaultConnection"))
             );
+            services.AddScoped<IProductRepository, ProductRepository>();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline. Order matters.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
